@@ -276,7 +276,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 75
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -355,6 +355,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridSize: {x: 40, y: 20, z: 20}
   pipePrefab: {fileID: 1465877211457918279, guid: 6cab564855a9f4fd59a86a725dc1477d, type: 3}
+  camera: {fileID: 963194225}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

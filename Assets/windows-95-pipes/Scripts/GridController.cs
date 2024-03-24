@@ -8,6 +8,7 @@ public class GridController : MonoBehaviour
 {
     public Vector3Int gridSize;
     public GameObject pipePrefab;
+    public GameObject camera;
     
     private Dictionary<Vector3Int, CellState> _grid = new();
     
@@ -23,6 +24,7 @@ public class GridController : MonoBehaviour
     void Start()
     {
         CreateNewPipe();
+        CenterCamera();
     }
 
     public void CreateNewPipe()
@@ -97,6 +99,11 @@ public class GridController : MonoBehaviour
     public void AddPipe(Vector3Int position, GameObject pipe)
     {
         _grid[position] = new CellState { pipe = pipe };
+    }
+
+    public void CenterCamera()
+    {
+        camera.transform.position = new Vector3(gridSize.x / 2, gridSize.y / 2, -gridSize.z);
     }
 }
 

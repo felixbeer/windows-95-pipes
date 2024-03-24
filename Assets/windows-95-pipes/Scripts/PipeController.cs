@@ -10,10 +10,10 @@ public class PipeController : MonoBehaviour
     private Color _color;
 
     // speed at which the pipe moves
-    private const float SpawnSpeed = 0.05f;
+    private const float SpawnSpeed = 0.02f;
     // minimum number of straight segments before a corner can be created
     // this is to avoid creating corners too close to each other
-    private const int MinStraightSegments = 3;
+    private const int MinStraightSegments = 1;
 
     public static Vector3 CornerSize = new Vector3(1.25f, 1.25f, 1.25f);
     public static Vector3 PipeSegmentSize = new Vector3(0.75f, 0.5f, 0.75f);
@@ -81,7 +81,7 @@ public class PipeController : MonoBehaviour
         var cylinder = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         cylinder.transform.localScale = CornerSize;
         cylinder.transform.position = position;
-        cylinder.GetComponent<Renderer>().material.color = _color;
+        cylinder.GetComponent<MeshRenderer>().material.color = _color;
 
         GridController.Instance.AddPipe(position, gameObject);
         _pipeSegments.Add(cylinder);
