@@ -9,7 +9,7 @@ public class GridController : MonoBehaviour
     public Vector3Int gridSize;
     public GameObject pipePrefab;
     
-    private Dictionary<Vector3Int, CellState> _grid = new Dictionary<Vector3Int, CellState>();
+    private Dictionary<Vector3Int, CellState> _grid = new();
     
     // this is not the cleanest way to do this, but allows access to the grid controller from pipes
     public static GridController Instance;
@@ -30,6 +30,7 @@ public class GridController : MonoBehaviour
         var cell = GetRandomFreeCell();
         if(cell == new Vector3Int(-1, -1, -1))
         {
+            // no more free cells
             return;
         }
         Instantiate(pipePrefab, cell, Quaternion.identity);

@@ -10,18 +10,23 @@ public class PipeController : MonoBehaviour
     private Color _color;
 
     // speed at which the pipe moves
-    public static float SpawnSpeed = 0.05f;
-    
+    private const float SpawnSpeed = 0.05f;
+    // minimum number of straight segments before a corner can be created
+    // this is to avoid creating corners too close to each other
+    private const int MinStraightSegments = 3;
+
     public static Vector3 CornerSize = new Vector3(1.25f, 1.25f, 1.25f);
     public static Vector3 PipeSegmentSize = new Vector3(0.75f, 0.5f, 0.75f);
     
     private Vector3 _basePosition;
     private Vector3 _currentPosition;
-    private Vector3 _currentDirection;
+    private Vector3 _currentDirection = Vector3.zero;
     
     private List<GameObject> _pipeSegments = new List<GameObject>();
     
-    private bool isDone = false;
+    private bool _isDone = false;
+
+    private int _straightSegments = 0;
     
     // Start is called before the first frame update
     IEnumerator Start()
@@ -29,7 +34,7 @@ public class PipeController : MonoBehaviour
         _basePosition = transform.position;
         _currentPosition = _basePosition;
         _color = new Color(Random.value, Random.value, Random.value);
-        while(!isDone)
+        while(!_isDone)
         {
             yield return new WaitForSeconds(SpawnSpeed);
 
@@ -49,15 +54,21 @@ public class PipeController : MonoBehaviour
         if(newDirection == new Vector3(0,0,0))
         {
             ReplaceLastSegment();
-            isDone = true;
+            _isDone = true;
             GridController.Instance.CreateNewPipe();
             return;
         }
 
         if (newDirection != _currentDirection)
         {
+            _straightSegments = 0;
             ReplaceLastSegment();
         }
+        else
+        {
+            _straightSegments++;
+        }
+        
         _currentDirection = newDirection;
         _currentPosition = _basePosition + newDirection;
         var direction = _currentPosition - _basePosition;
@@ -108,9 +119,18 @@ public class PipeController : MonoBehaviour
             return new Vector3(0,0,0);
         }
         
+        if(_currentDirection != Vector3.zero && _straightSegments < MinStraightSegments)
+        {
+            if(neighbours.Contains(Vector3Int.RoundToInt(_currentDirection)))
+            {
+                return _currentDirection;
+            }
+            return new Vector3(0,0,0);
+        }
+        
         var randomValue = Random.value;
 
-        // in 3 out of 4 cases, go straight, if possible
+        // in ~3 out of 4 cases, go straight, if possible
         if (randomValue < 0.75f && neighbours.Contains(Vector3Int.RoundToInt(_currentDirection)))
         {
             return _currentDirection;
